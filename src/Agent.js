@@ -9,8 +9,8 @@ const appid='11117c8bb5adb87';
 const apikey='3244e1da16d747391d68a8e5c6a75a25ab8458c1';
 
 
-const agentUID = 'hellfsdgfo';
-const customerUID='fsfs';
+const agentUID = 'agent-trial-4';
+const customerUID='client-trial-4';
 
 class Agent extends Component {
 
@@ -19,6 +19,7 @@ class Agent extends Component {
         let uid = localStorage.getItem(customerUID);
         let uidb=localStorage.getItem(agentUID);
         var flag=1;
+        console.log("your an agent");
         this.getconversation(agentUID,customerUID,flag) ;     
       }
       render() {
@@ -40,7 +41,7 @@ class Agent extends Component {
         this.sendmessage(agentUID,customerUID,newMessage);
         
         // create listener
-        this.getconversation(agentUID,customerUID);
+        //this.getconversation(agentUID,customerUID);
         
     
       };
@@ -48,7 +49,7 @@ class Agent extends Component {
         var options = {
           method: 'GET',
           url: 'https://api-eu.cometchat.io/v2.0/users/'+String(agentUID)+'/users/'+String(customerUID)+'/messages',
-          qs: {unread: 'true', undelivered: 'true'},
+          //qs: {unread: 'true', undelivered: 'true'},
           headers: {
             appid: '11117c8bb5adb87',
             apikey: '3244e1da16d747391d68a8e5c6a75a25ab8458c1',
@@ -56,29 +57,27 @@ class Agent extends Component {
             accept: 'application/json'
           }
         };
-        console.log("getconversation",options.url)
         
         request(options, function (error, response, body) {
-          if (error) throw new Error(error);
-          //addResponseMessage(response);
-          //var j=JSON.parse(response)
-          //var message=j["data"][0]["data"][]
-          //console.log(response["data"].length);
-          
+          if (error) throw new Error(error);    
           var j=JSON.parse(response["body"])
-          j=j.data
+          console.log(j)
+          j=j["data"]
+          if(j.length===0){return }
           var x
+          console.log(j)
           if(flag){
           for(x in j){
             //console.log("x in j",j[x].data.text);
-            if(j[x].sender==customerUID){
+            if(j[x].sender===customerUID){
             addResponseMessage(String(j[x].data.text));}
             else{
               addUserMessage((String(j[x].data.text)))
             }
           }}
+      
           console.log("obj",j[0].data.text);
-           addUserMessage(String(j[j.length-1].data.text))
+           //addUserMessage(String(j[j.length-1].data.text))
           console.log(typeof(j))
         });
       }
@@ -92,7 +91,6 @@ class Agent extends Component {
       'content-type': 'application/json',
       accept: 'application/json'
     },
-    //body: '{"uid":'+'"'+String(UID)+'"'+',"name":"client","role":"default","withAuthToken":true}'
     body: '{"receiver":'+'"'+String(customerUID)+'"'+',"receiverType":"user","category":"message","type":"text","data":{"text":'+'"'+String(newMessage)+'"'+'}}'
 };
   
