@@ -9,8 +9,8 @@ const appid='11117c8bb5adb87';
 const apikey='3244e1da16d747391d68a8e5c6a75a25ab8458c1';
 
 
-const agentUID = 'agent-trial-4';
-const customerUID='client-trial-4';
+const agentUID = 'agent-trial-12';
+const customerUID='client-trial-12';
 
 class Agent extends Component {
 
@@ -26,8 +26,10 @@ class Agent extends Component {
         return (
           <div className="App">
             <Widget
+
               handleNewUserMessage={this.handleNewUserMessage}
-              title='Broker-Chat'
+              title='Client-Chat'
+              subtitle=''
     
             />
           </div>
@@ -38,9 +40,15 @@ class Agent extends Component {
         console.log(`New message incomig! ${newMessage}`);
         // Now send the message throught the backend API
         console.log(newMessage);
-        this.sendmessage(agentUID,customerUID,newMessage);
-        
+         this.sendmessage(agentUID,customerUID,newMessage);
+        var result=dropMessages();
         // create listener
+        console.log("there is a not return type in dropmessage")
+      //addUserMessage("everything is perfect now")
+      //setTimeout(console.log("waited"),4000);
+      this.getconversation(agentUID,customerUID,1);
+      setTimeout(addUserMessage(newMessage),9000);
+      //
         //this.getconversation(agentUID,customerUID);
         
     
@@ -65,7 +73,7 @@ class Agent extends Component {
           j=j["data"]
           if(j.length===0){return }
           var x
-          console.log(j)
+          console.log("getconversation",j)
           if(flag){
           for(x in j){
             //console.log("x in j",j[x].data.text);
@@ -75,7 +83,7 @@ class Agent extends Component {
               addUserMessage((String(j[x].data.text)))
             }
           }}
-      
+          //addUserMessage(newMessage)
           console.log("obj",j[0].data.text);
            //addUserMessage(String(j[j.length-1].data.text))
           console.log(typeof(j))
@@ -96,8 +104,9 @@ class Agent extends Component {
   
   request(options, function (error, response, body) {
     if (error) throw new Error(error);
-  
-    console.log(body);
+    console.log("send message",body);
+    return ;
+    
   });
         }      
   }
